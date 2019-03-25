@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+        http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+	<!-- 01. 간단한 빈 설정 -->
+	<!-- <bean class="com.douzone.springcontainer.videosystem.Avengers"> </bean> -->
+
+	<!-- 02. 설정된 빈에 아이디 설정하기 -->
+	<bean id="digitalVideoDisc"
+		class="com.douzone.springcontainer.videosystem.Avengers">
+
+	</bean>
+
+	<!-- 03. 생성자를 통한 빈 주입 -->
+	<bean id="dvdPlayer"
+		class="com.douzone.springcontainer.videosystem.VideoSystemConfig">
+		<constructor-arg ref="digitalVideoDisc"></constructor-arg>
+	</bean>
+
+	<!-- 04. 생성자를 통한 빈 주입 2 : c-namespace 사용 dvd는 생성자 arg의 이름 (spring 3.0 부터 
+		지원) -->
+	<bean id="dvdPlayer2"
+		class="com.douzone.springcontainer.videosystem.VideoSystemConfig"
+		c:dvd-ref="digitalVideoDisc" />
+
+
+	<!-- 05. 생성자를 통한 빈 주입 3 : c-namespace 의 index 사용 -->
+	<bean id="dvdPlayer3"
+		class="com.douzone.springcontainer.videosystem.VideoSystemConfig"
+		c:_0-ref="digitalVideoDisc" />
+
+	<!-- 06. 생성자를 통한 빈 주입 4 : c-namespace 의 사용 argument가 하나인 경우 -->
+	<bean id="dvdPlayer4"
+		class="com.douzone.springcontainer.videosystem.VideoSystemConfig"
+		c:_-ref="digitalVideoDisc" />
+
+	<!-- 07. 생성자를 통한 빈 주입 5 : listeral 값을 생성자에 주입 01 -->
+	<bean id="digitalBlankDisc1"
+		class="com.douzone.springcontainer.videosystem.BlankDisc">
+		<constructor-arg name="title"
+			value="Avenger Infinity War"></constructor-arg>
+		<constructor-arg name="studio" value="MARVEL"></constructor-arg>
+	</bean>
+
+
+	<!-- 08. 생성자를 통한 빈 주입 6 : listeral 값을 생성자에 주입 02 -->
+	<bean id="digitalBlankDisc2"
+		class="com.douzone.springcontainer.videosystem.BlankDisc"
+		c:title="Avengers Infinity War" c:studio="MARVEL" />
+
+	<!-- 09. 생성자를 통한 빈 주입 7 : listeral 값을 생성자에 주입 03 -->
+	<bean id="digitalBlankDisc3"
+		class="com.douzone.springcontainer.videosystem.BlankDisc"
+		c:_0="Avengers Infinity War" c:_1="MARVEL" />
+
+
+	<!-- 10. 생성자를 통한 빈 주입 8 : 와이어링 콜렉션 01 --> <!-- name대신 index로 해도무방 순서대로하면 name,index 둘다 필요없음 <null/> 세팅방법 -->
+	<bean id="digitalBlankDisc4"
+		class="com.douzone.springcontainer.videosystem.BlankDisc">
+		<constructor-arg name="title"
+			value="Avenger Infinity War"></constructor-arg>
+		<constructor-arg name="studio" value="MARVEL"></constructor-arg>
+		<constructor-arg name="actors">
+			<null />
+		</constructor-arg>
+	</bean>
+
+	<!-- 11. 생성자를 통한 빈 주입 9 : 와이어링 콜렉션 02 --> <!-- name대신 index로 해도무방 순서대로하면 name,index 둘다 필요없음 <null/> 세팅방법 -->
+	<bean id="digitalBlankDisc5"
+		class="com.douzone.springcontainer.videosystem.BlankDisc">
+		<constructor-arg name="title"
+			value="Avenger Infinity War"></constructor-arg>
+		<constructor-arg name="studio" value="MARVEL"></constructor-arg>
+		<constructor-arg name="actors">
+			<list>
+				<value>아이언맨</value>
+				<value>스파이더맨</value>
+				<value>스칼렛 요한슨</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 12. 생성자를 통한 빈 주입 10 : 와이어링 콜렉션 03 -->
+	<bean id="dvdPack"
+		class="com.douzone.springcontainer.videosystem.DVDPack">
+		<constructor-arg value="Avenger Triplepack"></constructor-arg>
+		<constructor-arg>
+			<list>
+				<ref bean="digitalVideoDisc" />
+				<ref bean="digitalBlankDisc5" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 13. 프로퍼티를 통한 빈 주입 01 : 필드의 이름이아니라 setter의 이름 set() ()안의 이름을 적어주어야함 -->
+	<bean id="dvdPlayer5"
+		class="com.douzone.springcontainer.videosystem.VideoSystemConfig">
+		<property name="DigitalVideoDisc" ref="digitalBlankDisc5"></property>
+	</bean>
+
+
+	<!-- 14. 프로퍼티를 통한 빈 주입 02: -->
+	<bean id="dvdPlayer6"
+		class="com.douzone.springcontainer.videosystem.VideoSystemConfig"
+		p:digitalVideoDisc-ref="digitalBlankDisc5">
+	</bean>
+
+	<!-- 15. 프로퍼티를 통한 빈 주입 03 : 리터럴값 주입01 -->
+	<bean id="digitalBlankDisc6"
+		class="com.douzone.springcontainer.videosystem.BlankDisc">
+		<property name="title" value="Avenger Infinity War" />
+		<property name="studio" value="MARVEL" />
+		<property name="actors">
+			<list>
+				<value>아이언맨</value>
+				<value>스파이더맨</value>
+				<value>스칼렛 요한슨</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 16. 프로퍼티를 통한 빈 주입 04 : 리터럴값 주입02 -->
+	<bean id="digitalBlankDisc7"
+		class="com.douzone.springcontainer.videosystem.BlankDisc"
+		p:title="Avenger Infinity War" p:studio="MARVEL">
+		<!-- 얘는 p못씀 -->
+		<property name="actors">
+			<list>
+				<value>아이언맨</value>
+				<value>스파이더맨</value>
+				<value>스칼렛 요한슨</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 17. 프로퍼티를 통한 빈 주입 05 : uill namespace를 사용한 단순화 -->
+	<util:list id="actorList">
+		<value>아이언맨</value>
+		<value>스파이더맨</value>
+		<value>스칼렛 요한슨</value>
+	</util:list>
+	<bean id="digitalBlankDisc8"
+		class="com.douzone.springcontainer.videosystem.BlankDisc"
+		p:title="Avenger Infinity War" p:studio="MARVEL" p:actors-ref="actorList">
+	</bean>
+
+
+
+
+</beans>
